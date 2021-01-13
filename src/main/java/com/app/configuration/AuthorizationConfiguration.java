@@ -45,12 +45,25 @@ public class AuthorizationConfiguration extends AuthorizationServerConfigurerAda
                 .inMemory()
                 .withClient("clientapp")
                     .secret("123456")
-                    .authorizedGrantTypes("password","refresh_token")
+                    .authorizedGrantTypes("password", "authorization_code", "refresh_token")
                     .scopes("read", "write")
                     .resourceIds(RESOURCE_ID)
-                    .autoApprove(true)
+                    .redirectUris("http://localhost:8081/login")
                     .accessTokenValiditySeconds(200)
-                    .refreshTokenValiditySeconds(100);
+                    .refreshTokenValiditySeconds(100)
+                    .and()
+                    .withClient("jsclient")
+                        .secret("jspasswd")
+                        .authorizedGrantTypes("implicit")
+                        .scopes("read", "write")
+                        .resourceIds(RESOURCE_ID)
+                        .authorities("CLIENT")
+                        .redirectUris("http://localhost:20000/implicit-client/")
+                        .accessTokenValiditySeconds(60 * 60 * 24) // token berlaku seharian, besok harus login ulang
+                        .autoApprove(true)
+                  
+  ;
+
      
     }
 }

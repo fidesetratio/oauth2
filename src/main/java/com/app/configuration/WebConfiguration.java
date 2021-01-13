@@ -32,7 +32,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
 	 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
+	/*	
 		http.csrf().disable()
 		.formLogin().disable()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -50,8 +50,21 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
          .authorizeRequests()
          .antMatchers("/manager/**").permitAll() 
          .antMatchers("/oauth/revoke-token").permitAll() 
+         .antMatchers("/oauth/authorize**").permitAll() 
           
          .anyRequest().authenticated();
+         */
+		
+		 http
+         .antMatcher("/**")
+             .authorizeRequests()
+             .antMatchers("/oauth/authorize**", "/login**", "/error**")
+             .permitAll()
+         .and()
+             .authorizeRequests()
+             .anyRequest().authenticated()
+         .and()
+             .formLogin().permitAll();
 	}
 		
 	@Override
